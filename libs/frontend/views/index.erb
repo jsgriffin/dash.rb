@@ -1,8 +1,19 @@
 <html>
 	<head>
-		<title>Dashboard</title>		
+		<title>Dashboard</title>	
+		
+		<script type="text/javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script type="text/javascript" src="/js/dashboard.js"></script>	
 	</head>
 	<body>
-
+        <div id="widgets-panel">
+            <h2>Available Widgets</h2>
+            
+            <ul>
+                <% widgets.each do |widget| %>
+                    <li><%= widget %></li>
+                <% end %>
+            </ul>
+        </div>
 	</body>
 </html>
