@@ -16,13 +16,6 @@ class Dash
     get '/' do
       erb(:index, {}, :widgets => widgets.keys)
     end
-    
-    get '/widgets/:widget/template' do
-      widget_path = widgets[params[:widget]]
-      template_file = File.open("#{widget_path}/public/template.ejs")
-      template = template_file.read
-      erb(:blank, {}, :output => template)
-    end
   end
 end
 
