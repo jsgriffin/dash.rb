@@ -39,7 +39,8 @@ var Dashboard = Class.extend({
     addTemplateToBody: function(widget, template) {
         this.numLoadedWidgets++;
         var widgetId = 'widget-' + (this.numLoadedWidgets);
-        $('#widget-container').append('<div class="' + widget + '" id="' + widgetId + '">' + template + '</div>');
+        $('#widget-container').append('<div class="widget ' + widget + '" id="' + widgetId + '">' + template + '</div>');
+        $('.widget').draggable({containment: 'parent', zIndex: 2700});
         this.loadWidgetJs(widget, widgetId);
     },
 
