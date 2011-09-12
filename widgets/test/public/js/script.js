@@ -1,5 +1,5 @@
 var Test = Widget.extend({
-    init: function() {
-        console.log("Widget init'd!");
-    };  
+    init: function(s) {
+        this._super(s);
+    }
 });

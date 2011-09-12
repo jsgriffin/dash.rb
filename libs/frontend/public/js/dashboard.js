@@ -1,7 +1,8 @@
 var Dashboard = Class.extend({
     init: function() {
-        this.availableWidgets = [];
-        this.loadedWidgets = [];
+        this.availableWidgets = {};
+        this.loadedWidgets = {};
+        this.numLoadedWidgets = 0;
     },
     
     // Register a new widget
@@ -36,33 +37,39 @@ var Dashboard = Class.extend({
      * and compile the template from ejs
      */
     addTemplateToBody: function(widget, template) {
-        $('#widget-container').append('<div class="' + widget + '">' + template + '</div>');
-        this.loadWidgetJs(widget);
+        this.numLoadedWidgets++;
+        var widgetId = 'widget-' + (this.numLoadedWidgets);
+        $('#widget-container').append('<div class="' + widget + '" id="' + widgetId + '">' + template + '</div>');
+        this.loadWidgetJs(widget, widgetId);
     },
 
-    loadWidgetJs: function(widget) {
+    /*
+     * Load the widget's JavaScript, and then load the 
+     * widget's class 
+     */
+    loadWidgetJs: function(widget, id) {
         var _this = this;
-        
         
         $.ajax({
             url: '/widgets/' + widget + '/public/js/script.js',
             dataType: "script",
             success: function() {
-                console.log("Beans");
-                var className = this.convertWidgetNameToClassName(widget);
-                var widget = new Widget({id: 1, title: 'Test 1', name: 'test-1'});
-                eval('var widgetObj = new ' + className + '()');
-                widgetObj.prototype = widget;
-                console.log(widgetObj);
+                var className = _this.convertWidgetNameToClassName(widget);
+                var settings = {
+                    title: className, 
+                    widget: widget,
+                    id: id
+                };
+                eval('var widgetObj = new ' + className + '(settings)');
                 widgetObj.init();
                 widgetObj.receiveData("Beans");
-                _this.loadedWidgets[widget] = widgetObj;
+                _this.loadedWidgets[id] = widgetObj;
             },
             error: function(error) {
-                console.log("Error");
+                console.log("Error loading widget JS");
                 console.log(error);
             }
-        })
+        });
     },
     
     /*
