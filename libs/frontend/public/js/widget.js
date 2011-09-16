@@ -3,11 +3,11 @@ var Widget = Class.extend({
         this.settings = s;
     },
     
-    receiveData: function(data) {
-        console.log("Received: " + data);
+    receive: function(data) {
+
     },
     
-    sendData: function(data) {
-        console.log("Sending: " + data);
+    send: function(data) {
+        socket.send(data);
     }
 });

@@ -59,11 +59,10 @@ var Dashboard = Class.extend({
                 var settings = {
                     title: className, 
                     widget: widget,
-                    id: id
+                    containerId: id
                 };
                 eval('var widgetObj = new ' + className + '(settings)');
-                widgetObj.init();
-                widgetObj.receiveData("Beans");
+                widgetObj.onLoad();
                 _this.loadedWidgets[id] = widgetObj;
             },
             error: function(error) {

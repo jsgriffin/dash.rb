@@ -1,6 +1,9 @@
 var dashboard = null;
+var socket = null;
 
 $(function(){
+    socket = new Socket();
+    
     dashboard = new Dashboard();
     dashboard.fetchWidgetTemplate('test');
     dashboard.convertWidgetNameToClassName('test-beans-1-dogs');
@@ -18,5 +21,5 @@ $(function(){
         $('#widgets-panel').animate({
             height: height
         });
-    });
+    });    
 });

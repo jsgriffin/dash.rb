@@ -1,21 +1,30 @@
 require 'eventmachine'
+require 'em-websocket'
 
 class Dash
   class CommsServer
-    def self.run      
-      EventMachine::run do
-        host = '0.0.0.0'
-        port = 8989
-        EventMachine::start_server host, port, CommsHandler
-        puts "Started Comms Server"
-      end
-    end
+    @sockets = []
     
-    module CommsHandler
-      def receive_data(data)
-        puts "Received data: #{data}"
-        send_data(data)
+    def self.run      
+      host = '0.0.0.0'
+      port = 8989
+      EventMachine::WebSocket.start(:host => host, :port => port) do |socket|
+        socket.onopen do
+          @sockets << socket
+          puts "Client connected"
+        end
+
+        socket.onmessage do |mess|
+          puts "Received #{mess}"
+          @sockets.each {|s| s.send mess}
+        end
+
+        socket.onclose do
+          @sockets.delete socket
+          puts "Client disconnected"
+        end          
       end
+      puts "Started Comms Server on port #{port}"
     end
   end
 end
