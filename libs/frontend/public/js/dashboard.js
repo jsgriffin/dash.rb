@@ -5,6 +5,14 @@ var Dashboard = Class.extend({
         this.numLoadedWidgets = 0;
     },
     
+    getWidget: function(widgetId) {
+        if(this.loadedWidgets[widgetId] != undefined) {
+            return this.loadedWidgets[widgetId];
+        } else {
+            return null;
+        }
+    },
+    
     // Register a new widget
     loadWidget: function(widget) {  
         this.fetchWidgetTemplate(widget);
@@ -57,19 +65,44 @@ var Dashboard = Class.extend({
             success: function() {
                 var className = _this.convertWidgetNameToClassName(widget);
                 var settings = {
-                    title: className, 
+                    title: className,
                     widget: widget,
-                    containerId: id,
+                    id: id,
+                    containerId: '#' + id,
                     template: template
                 };
                 eval('var widgetObj = new ' + className + '(settings)');
                 widgetObj.onLoad();
                 widgetObj.render();
                 _this.loadedWidgets[id] = widgetObj;
+                _this.registerWidget(id);
             },
             error: function(error) {
                 console.log("Error loading widget JS");
                 console.log(error);
+            }
+        });
+    },
+    
+    /*
+     * Register a widget with the backend
+     */
+    registerWidget: function(widgetId) {
+        var postData = {
+            widgetId: widgetId,
+            type: this.loadedWidgets[widgetId].settings.widget
+        };
+        console.log(postData);
+        
+        $.ajax({
+            url: '/register-widget',
+            data: {widget: JSON.stringify(postData)},
+            type: "POST",
+            success: function(data) {
+                
+            },
+            error: function(error) {
+                console.log("Error registering widget");
             }
         });
     },

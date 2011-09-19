@@ -9,8 +9,9 @@ var Socket = Class.extend({
         }
         
         this.socket.onmessage = function(msg) {
-            console.log("Received: ");
-            console.log(msg);
+            msg = JSON.parse(msg.data);
+            var widget = dashboard.getWidget(msg.id);
+            widget.receive(msg.data);
         }
         
         this.socket.onclose = function() {
@@ -20,12 +21,16 @@ var Socket = Class.extend({
         console.log("Waiting for socket to open...");
     },
     
-    send: function(msg) {
-        console.log("Sending: " + msg);
+    send: function(widgetId, msg) {
+        var envelope = {
+            id: widgetId,
+            data: msg
+        };
+        
         if(this.socket.readyState != 1) {
             console.log("Socket not open. State is: " + this.socket.readyState);
         } else {
-            this.socket.send(msg);
+            this.socket.send(JSON.stringify(envelope));
         }
     }
 });

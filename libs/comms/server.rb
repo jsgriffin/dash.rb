@@ -5,7 +5,7 @@ class Dash
   class CommsServer
     @sockets = []
     
-    def self.run      
+    def self.run(dashboard)  
       host = '0.0.0.0'
       port = 8989
       EventMachine::WebSocket.start(:host => host, :port => port) do |socket|
