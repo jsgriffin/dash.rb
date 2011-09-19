@@ -7,11 +7,10 @@ var Test = Widget.extend({
         var div = this.settings.containerId;
         _this = this;
         
-        console.log(this);
-        $('#' + div).find('a.test-send').click(function() {
-            console.log("Sending...");
-            console.log(_this);
+        $(div).find('a.test-send').click(function() {
             _this.send("Donkeys");
         });
+        
+        this.data.title = "Beans AND cheese";
     }
 });

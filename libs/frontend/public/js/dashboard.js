@@ -39,16 +39,16 @@ var Dashboard = Class.extend({
     addTemplateToBody: function(widget, template) {
         this.numLoadedWidgets++;
         var widgetId = 'widget-' + (this.numLoadedWidgets);
-        $('#widget-container').append('<div class="widget ' + widget + '" id="' + widgetId + '">' + template + '</div>');
+        $('#widget-container').append('<div class="widget ' + widget + '" id="' + widgetId + '"></div>');
         $('.widget').draggable({containment: 'parent', zIndex: 2700});
-        this.loadWidgetJs(widget, widgetId);
+        this.loadWidgetJs(widget, widgetId, template);
     },
 
     /*
      * Load the widget's JavaScript, and then load the 
      * widget's class 
      */
-    loadWidgetJs: function(widget, id) {
+    loadWidgetJs: function(widget, id, template) {
         var _this = this;
         
         $.ajax({
@@ -59,10 +59,12 @@ var Dashboard = Class.extend({
                 var settings = {
                     title: className, 
                     widget: widget,
-                    containerId: id
+                    containerId: id,
+                    template: template
                 };
                 eval('var widgetObj = new ' + className + '(settings)');
                 widgetObj.onLoad();
+                widgetObj.render();
                 _this.loadedWidgets[id] = widgetObj;
             },
             error: function(error) {
