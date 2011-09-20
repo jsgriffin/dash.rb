@@ -4,9 +4,9 @@ class Dash
     @availableWidgets = nil
     
     def initialize
-      self.discover
       @loadedWidgets = Hash.new
       @availableWidgets = Hash.new
+      self.discover
     end
     
     def registerWidget(data)
@@ -15,6 +15,10 @@ class Dash
     
     def widgets
       return @availableWidgets
+    end
+    
+    def loadedWidgets
+      return @loadedWidgets
     end
     
     def discover
