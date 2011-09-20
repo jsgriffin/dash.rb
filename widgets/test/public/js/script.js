@@ -3,14 +3,21 @@ var Test = Widget.extend({
         this._super(s);
     },
     
-    onLoad: function() {
+    onLoad: function() {        
+        this.data.title = "Beans AND cheese";
+    },
+    
+    afterRender: function() {
         var div = this.settings.containerId;
         _this = this;
         
         $(div).find('a.test-send').click(function() {
-            _this.send("Donkeys");
+            _this.send({title: "Donkeys"});
         });
-        
-        this.data.title = "Beans AND cheese";
+    },
+    
+    receive: function(data) {
+        this.data.title = data.title;
+        this.render();
     }
 });
