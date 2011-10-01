@@ -2,7 +2,9 @@ class TestEndpoints < Dash::Feeder
   
   def get_data(params)
     puts "Called!"
-    self.send(params[:title])
+    obj = Hash.new
+    obj["title"] = params[:title]
+    self.send(obj)
   end
   
 end
