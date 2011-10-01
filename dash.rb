@@ -3,6 +3,15 @@ require 'libs/dashboard'
 require 'libs/frontend/server'
 require 'libs/comms/server'
 require 'libs/processes/server'
+require 'libs/processes/feeder'
+require 'libs/comms/web-socket-client/lib/web_socket'
+
+begin
+  require 'fastthread'
+rescue LoadError
+ensure
+  require 'thread'
+end
 
 @dashboard = Dash::Dashboard.new
 

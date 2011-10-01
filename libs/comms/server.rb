@@ -17,7 +17,7 @@ class Dash
         socket.onmessage do |mess|
           puts "Received #{mess}"
           object = JSON.parse(mess)
-          widget = dashboard.loadedWidgets[object["id"]]
+          widget = dashboard.loaded_widgets[object["id"]]
           @sockets.each {|s| s.send mess}
         end
 
