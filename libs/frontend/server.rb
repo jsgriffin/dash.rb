@@ -6,7 +6,8 @@ class Dash
   class FrontendServer < Sinatra::Base
     dir = File.dirname(File.expand_path(__FILE__))
     @@dashboard = nil
-
+    @@endpoints = nil
+    
     set :views,  "#{dir}/views"
     set :public, "#{dir}/public"
     set :static, true
@@ -14,6 +15,8 @@ class Dash
 
     def self.run(dashboard)
       @@dashboard = dashboard
+      @@endpoints = @@dashboard.endpoints
+      
       self.run!
     end
 
@@ -25,6 +28,17 @@ class Dash
     post '/register-widget' do
       puts params
       @@dashboard.registerWidget(JSON.parse(params[:widget]))
+    end
+    
+    get '/:widget/:action' do
+      puts @@endpoints
+      if @@endpoints.has_key?(params[:widget]) && @@endpoints[params[:widget]].respond_to?(params[:action])
+        puts "Sending #{params[:action]} to #{params[:widget]}"
+        endpoint = @@endpoints[params[:widget]]
+        endpoint.__send__ params[:action], params
+      else
+        puts "#{params[:widget]}::#{params[:action]} didn't exist"
+      end
     end
   end
 end

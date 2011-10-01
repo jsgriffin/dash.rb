@@ -31,6 +31,20 @@ class Dash
       end
       @availableWidgets = widgets
     end
+    
+    def endpoints
+      base = Dir.pwd
+      dirs = Dir.glob(base + '/widgets/*/feeders/endpoints/endpoints.rb')
+      endpoints = Hash.new
+      dirs.each do |dir|
+        require dir
+        widget_name = File.basename(File.dirname(File.dirname(File.dirname(dir))))
+        class_name = "#{widget_name.capitalize}Endpoints"
+        puts "Initing #{class_name}"
+        endpoints[widget_name] = Module.const_get(class_name).new
+      end
+      return endpoints     
+    end
    
   end
 end
