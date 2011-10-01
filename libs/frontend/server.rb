@@ -6,7 +6,6 @@ class Dash
   class FrontendServer < Sinatra::Base
     dir = File.dirname(File.expand_path(__FILE__))
     @@dashboard = nil
-    @@endpoints = nil
     
     set :views,  "#{dir}/views"
     set :public, "#{dir}/public"
@@ -15,7 +14,6 @@ class Dash
 
     def self.run(dashboard)
       @@dashboard = dashboard
-      @@endpoints = @@dashboard.endpoints
       
       self.run!
     end
@@ -31,10 +29,9 @@ class Dash
     end
     
     get '/:widget/:action' do
-      puts @@endpoints
-      if @@endpoints.has_key?(params[:widget]) && @@endpoints[params[:widget]].respond_to?(params[:action])
+      if @@dashboard.loaded_widgets[params[:widget]].has_key?(:endpoint)
         puts "Sending #{params[:action]} to #{params[:widget]}"
-        endpoint = @@endpoints[params[:widget]]
+        endpoint = @@dashboard.loaded_widgets[params[:widget]][:endpoint]
         endpoint.__send__ params[:action], params
       else
         puts "#{params[:widget]}::#{params[:action]} didn't exist"
