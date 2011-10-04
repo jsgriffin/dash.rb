@@ -92,7 +92,8 @@ var Dashboard = Class.extend({
             widgetId: widgetId,
             type: this.loadedWidgets[widgetId].settings.widget
         };
-        console.log(postData);
+        
+        socket.send("register_widget", widgetId, postData);
         
         $.ajax({
             url: '/register-widget',

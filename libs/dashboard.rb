@@ -8,6 +8,7 @@ class Dash
       @available_widgets = Hash.new
       self.discover
       self.endpoints
+      self.daemons
     end
     
     def registerWidget(data)
@@ -52,10 +53,28 @@ class Dash
         require dir
         widget_name = File.basename(File.dirname(File.dirname(File.dirname(dir))))
         class_name = "#{widget_name.capitalize}Endpoints"
-        puts "Initing #{class_name}"
         endpoints[widget_name] = class_name
       end
       @endpoints = endpoints
+    end
+    
+    def daemons
+      base = Dir.pwd
+      dirs = Dir.glob(base + '/widgets/*/feeders/daemons/*.rb')
+      daemons = Hash.new
+      dirs.each do |dir|
+        require dir
+        widget_name = File.basename(File.dirname(File.dirname(File.dirname(dir))))
+        filename = File.basename(dir, ".rb")
+        class_name = "#{widget_name.capitalize}::#{filename.capitalize}Daemon"
+        
+        unless daemons.has_key?(widget_name)
+          daemons[widget_name] = Array.new
+        end
+        
+        daemons[widget_name] << class_name
+      end
+      @daemons = daemons
     end
    
   end

@@ -15,12 +15,13 @@ end
 
 @dashboard = Dash::Dashboard.new
 
+# Kick it all off
 frontend = Thread.new {Dash::FrontendServer.run(@dashboard)}
 comms = Thread.new {Dash::CommsServer.run(@dashboard)}
-#process = Thread.new {Dash::ProcessServer.run}
+process = Thread.new {Dash::ProcessServer.run(@dashboard)}
 
 # Sinatra grabs all Ctrl-C requests, so wait for it to finish first, 
 # then shut everything else down
 frontend.join
 comms.exit
-#process.exit
+process.exit

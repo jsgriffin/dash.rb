@@ -21,8 +21,9 @@ var Socket = Class.extend({
         console.log("Waiting for socket to open...");
     },
     
-    send: function(widgetId, msg) {
+    send: function(type, widgetId, msg) {
         var envelope = {
+            type: type,
             id: widgetId,
             data: msg
         };

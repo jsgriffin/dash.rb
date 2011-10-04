@@ -6,6 +6,7 @@ class Dash
       @client = WebSocket.new("ws://localhost:8989")
       puts "Sending #{msg}"
       object = Hash.new
+      object["type"] = :feed
       object["id"] = self.widget_id
       object["data"] = msg
       @client.send(object.to_json)

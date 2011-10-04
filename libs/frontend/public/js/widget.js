@@ -10,7 +10,7 @@ var Widget = Class.extend({
     
     send: function(data) {
         console.log("Sending from widget");
-        socket.send(this.settings.id, data);
+        socket.send("feed", this.settings.id, data);
     },
     
     render: function() {
