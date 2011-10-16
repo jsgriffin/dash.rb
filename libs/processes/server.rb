@@ -9,7 +9,8 @@ class Dash
       this.dashboard = dashboard
       
       @client = WebSocket.new("ws://localhost:8989")
-
+      puts "Process Server Init'd"
+      
       loop {
         data = JSON.parse(@client.receive)
 

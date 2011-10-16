@@ -5,8 +5,7 @@ $(function(){
     socket = new Socket();
     
     dashboard = new Dashboard();
-    dashboard.fetchWidgetTemplate('test');
-    dashboard.convertWidgetNameToClassName('test-beans-1-dogs');
+    dashboard.fetchWidgetTemplate('stats');
     
     $('#widgets-panel').animate({
         height: '15px'
